@@ -1,0 +1,57 @@
+@import '../../../variables.less';
+.container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: @color-sidebar-bg;
+}
+
+.innerContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinnerContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  width: 7rem;
+  height: 7rem;
+}
+
+.spinner {
+  margin: auto 0.5rem;
+  background-color: @color-spinner-bg;
+}
+
+.spinnerText .spinner {
+  background-color: @color-spinner-text-bg;
+}
+
+.text {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: @color-text-note-secondary-color;
+}
+
+.textContainer {
+  background-color: inherit;
+  position: relative;
+  top: -3.5rem;
+}

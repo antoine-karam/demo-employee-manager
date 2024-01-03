@@ -1,0 +1,61 @@
+@import '../../../variables.less';
+
+// General container styles
+.innercontainer {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+
+  &:hover,
+  &:active {
+    overflow-y: auto;
+  }
+}
+
+// Icon styles
+.icon {
+  font-size: 1.3rem;
+}
+
+// Bouncing animation for elements
+.elemBounceHover {
+  li:not(disabled) > a:hover > span > svg {
+    animation: elem-bounce-hover 1s;
+  }
+}
+
+@keyframes elem-bounce-hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.625rem);
+  }
+}
+
+// Styles for images
+.img {
+  width: 18rem;
+  height: 10rem;
+}
+
+// Styles for titles associated with images
+.imgTitle {
+  font-weight: 500;
+  color: #009fdb;
+  font-size: 1.5rem;
+}
+
+// Modifications when collapsed
+.imgCollapsed {
+  .img {
+    width: 5rem;
+    height: 3rem;
+  }
+
+  .imgTitle {
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,38 @@
+@import '../../../variables.less';
+
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: @color-top-bar-bg; // e.g., a light grey or your theme's primary color
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+    .fullScreenButton {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #b1b1b1; 
+      }
+    }
+  
+    .profile {
+      display: flex;
+      align-items: center;
+  
+      .img {
+        width: 40px; // Adjust as necessary
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+  }

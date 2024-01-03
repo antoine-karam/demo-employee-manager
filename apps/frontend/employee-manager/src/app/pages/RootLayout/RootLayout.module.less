@@ -1,0 +1,43 @@
+@import '../../../variables.less';
+
+.container {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.outlet {
+  overflow: auto;
+  height: calc(100vh - 5rem);
+}
+
+.fab {
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  position: fixed;
+  width: 3.438rem;
+  height: 3.438rem;
+  color: #6f84b0;
+  animation: opacity 2000ms ease-out forwards;
+  background-color: @color-hover-btn-icon-bg;
+  box-shadow: 0 0.15rem 0.5rem @color-fab-box-shadow-color;
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fab:hover {
+  color: @color-fab-hover-color;
+  background-color: #6f84b0;
+}

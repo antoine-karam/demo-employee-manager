@@ -1,0 +1,40 @@
+@import '../../../variables.less';
+.container {
+  padding: 0.8rem;
+  background-color: inherit;
+  max-width: calc(100vw - 5rem);
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0.5rem;
+  }
+}
+
+.breadcrumb {
+  padding-left: 0.7rem;
+}
+
+.main {
+  min-height: calc(100vh - 9.2rem);
+  border: 0.0625rem solid @color-border-color;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.7rem;
+  color: @color-page-content-title-color;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: @color-page-content-subtitle-color;
+}
+
+.children {
+  margin-top: 2rem;
+  padding-bottom: 6rem;
+}

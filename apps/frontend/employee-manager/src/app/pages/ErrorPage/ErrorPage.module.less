@@ -1,0 +1,56 @@
+@import '../../../variables.less';
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: @color-sidebar-bg;
+}
+
+.titleContainer {
+  top: 3%;
+  left: 2%;
+  display: flex;
+  font-size: 1.4rem;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+.title {
+  color: @color-sidebar-toggle-title-color;
+  background-color: @color-sidebar-toggle-title-bg;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  margin-left: 0.3rem;
+}
+
+.innerContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  color: @color-error-inner-container-color;
+}
+
+.flash {
+  color: @color-error-inner-container-flash-color;
+  font-size: 5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.goBack {
+  color: @color-error-inner-container-flash-color;
+  text-decoration: none;
+}
+
+.goBackContainer:hover,
+.goBackContainer a:hover {
+  color: @color-sidebar-toggle-title-color;
+}

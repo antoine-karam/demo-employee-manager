@@ -1,0 +1,60 @@
+@import '../../../variables.less';
+.toggleContainer {
+  z-index: 9999;
+  position: sticky;
+  top: 0;
+  background-color: @color-sidebar-bg;
+  height: 4.25rem;
+}
+
+.menuitem {
+  margin-bottom: 1.5rem;
+}
+
+.innerContainer {
+  display: flex;
+  padding-top: 1.5rem;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.titleContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.title {
+  max-width: 9.5rem;
+  background-color: @color-sidebar-bg;
+  padding: 0.3rem 0.5rem;
+  margin-left: 0.3rem;
+  color: #3db6ec;
+  border-radius: 0.3rem;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #000;
+  font-size: 1rem;
+}
+
+.iconContainer {
+  width: 12%;
+  min-width: 1.563rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  font-size: 1.5rem;
+  position: relative;
+  top: -0.05rem;
+}
+
+.iconCollapse {
+  top: 0.7rem;
+}
