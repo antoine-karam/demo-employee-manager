@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "windows", "darwin", "debian-openssl-1.1.x"]
+  previewFeatures = ["clientExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  Id          Int       @id @default(autoincrement())
+  Email       String
+  FirstName   String
+  LastName    String
+  Gender      String
+  DateOfBirth String
+  Phone       String?
+  PositionId  String    @db.Uuid
+  Postion     Position  @relation(fields: [PositionId], references: [Id], onDelete: Cascade, onUpdate: NoAction)
+  Address     Address[]
+}
+
+model Position {
+  Id       String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  Title    String
+  Salary   Decimal
+  Employee Employee[]
+}
+
+model Address {
+  Id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  City       String
+  State      String
+  Country    String
+  Street     String
+  EmployeeId Int
+  Employee   Employee @relation(fields: [EmployeeId], references: [Id])
+}

@@ -1,0 +1,53 @@
+{
+  "name": "employee-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/employee-service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/api/employee-service",
+        "main": "apps/api/employee-service/src/main.ts",
+        "tsConfig": "apps/api/employee-service/tsconfig.app.json",
+        "assets": ["apps/api/employee-service/src/assets"],
+        "webpackConfig": "apps/api/employee-service/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "employee-service:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "employee-service:build:development"
+        },
+        "production": {
+          "buildTarget": "employee-service:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/api/employee-service/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

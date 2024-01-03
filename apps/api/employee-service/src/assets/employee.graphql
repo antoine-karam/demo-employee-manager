@@ -1,0 +1,24 @@
+scalar Date
+
+enum Gender{
+    Male
+    Female
+} 
+
+
+type Employee {
+    Id: String!
+    Position: String!
+    Gender: Gender!
+    FirstName: String!
+    LastName: String!
+    Email: String!
+    PictureUrl: String
+    DateOfBirth: Date!
+    Phone: String
+    PrimaryAddress: String
+}
+
+type Query {
+  employees: [Employee]
+}
