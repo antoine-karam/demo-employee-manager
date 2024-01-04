@@ -1,13 +1,42 @@
 @import '../../../variables.less';
 
 .topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: @color-top-bar-bg; // e.g., a light grey or your theme's primary color
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  .leftSection {
+    flex-grow: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background-color: @color-top-bar-bg; // e.g., a light grey or your theme's primary color
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  
+    .searchContainer {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+
+      .searchIcon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .searchInput {
+        width: 100%;
+        padding: 5px 10px 5px 30px; // Left padding to make room for the icon
+        border: 1px solid;
+        border-radius: 5px;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+  .rightSection {
+    display: flex;
+    align-items: center;
     .fullScreenButton {
       background: transparent;
       border: none;
@@ -18,16 +47,16 @@
       padding: 5px;
       border-radius: 50%;
       transition: background-color 0.3s;
-  
+
       &:hover {
-        background-color: #b1b1b1; 
+        background-color: #b1b1b1;
       }
     }
-  
+
     .profile {
       display: flex;
       align-items: center;
-  
+
       .img {
         width: 40px; // Adjust as necessary
         height: 40px;
@@ -36,3 +65,4 @@
       }
     }
   }
+}

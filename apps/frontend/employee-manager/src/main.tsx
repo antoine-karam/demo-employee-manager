@@ -3,6 +3,9 @@ import * as ReactDOM from 'react-dom/client';
 
 import App from './app/app';
 import ErrorBoundary from './app/pages/ErrorBoundary/ErrorBoundary';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './styles.less'
 
 const root = ReactDOM.createRoot(
