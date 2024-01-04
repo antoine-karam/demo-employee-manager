@@ -1,1 +1,2 @@
-export const getGreeting = () => cy.get('h1');
+export const getHomeGreetings = () => cy.get('.h5');
+export const getTableHeader = () => cy.get('th');

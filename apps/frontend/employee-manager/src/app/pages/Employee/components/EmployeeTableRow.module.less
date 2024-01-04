@@ -1,0 +1,23 @@
+@import '../../../../variables.less';
+.collapsibleRow {
+  .expandContainer {
+    cursor: pointer;
+    color: @expand-icon-color;
+  }
+
+  .collapsibleColumn {
+    padding: 0;
+  }
+
+  .collapsibleContent {
+    padding: 10px;
+    border-top: 1px solid @collapse-border-color;
+    background-color: @card-bg;
+  }
+}
+.img {
+  width: 50px; // Reduced size for the profile image
+  height: 50px; // Maintain the aspect ratio
+  border-radius: @img-border-radius;
+  object-fit: cover; // Ensures the image covers the area without distortion
+}

@@ -1,16 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
   Link,
-  redirect,
   RouterProvider,
   createBrowserRouter,
 } from 'react-router-dom';
-
-import classes from './app.module.less';
 import { FaHouse } from 'react-icons/fa6';
+
+import EmployeePage from './pages/Employee/Employee';
+import BlankPage from './pages/BlankPage/BlankPage';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import RootLayout from './pages/RootLayout/RootLayout';
-import BlankPage from './pages/BlankPage/BlankPage';
+
+import classes from './app.module.less';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     handle: {
-      crumb: (pathName: string, isActive: boolean, data?: any) => {
+      crumb: (pathName: string, isActive: boolean, data?: unknown) => {
         return isActive ? (
           <FaHouse size="1.1rem" />
         ) : (
@@ -42,12 +43,31 @@ const router = createBrowserRouter([
           />
         ),
         handle: {
-          crumb: (pathName: string, isActive: boolean, data?: any) => {
+          crumb: (pathName: string, isActive: boolean, data?: unknown) => {
             return isActive ? (
               'Blank'
             ) : (
               <Link to={pathName} className="linkTo">
                 Blank
+              </Link>
+            );
+          },
+        },
+      },{
+        path: '/employee',
+        element: (
+          <EmployeePage
+            title="Employee Page"
+            description="Employee Page Property"
+          />
+        ),
+        handle: {
+          crumb: (pathName: string, isActive: boolean, data?: unknown) => {
+            return isActive ? (
+              'Employee'
+            ) : (
+              <Link to={pathName} className="linkTo">
+                Employee
               </Link>
             );
           },

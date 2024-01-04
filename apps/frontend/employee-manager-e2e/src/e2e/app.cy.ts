@@ -1,13 +1,9 @@
-import { getGreeting } from '../support/app.po';
+import { getHomeGreetings } from '../support/app.po';
 
 describe('employee-manager-e2e', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword');
-
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains(/Welcome/);
+    getHomeGreetings().contains(/Welcome/);
   });
 });
