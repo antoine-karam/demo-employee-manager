@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Modal, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '../../../redux';
@@ -11,21 +11,31 @@ import classes from './EmployeeTable.module.less';
 
 export type EmployeeTableProps = {
   employees: Employee[];
-  setAlert: (alert: AlertNotification | null) => void;
+  handleEditEmployee: (id: string) => (event: unknown) => void;
+  handleRemoveEmployee: (id: string) => void;
 };
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({
   employees,
-  setAlert,
+  handleEditEmployee,
+  handleRemoveEmployee,
 }) => {
   const { keyword } = useSelector((state: RootState) => state.ui);
+
+  const [popupData, setPopUpData] = useState<AlertNotification | undefined>(
+    undefined
+  );
+
   const [filteredEmployees, setFilteredEmployees] =
     useState<Employee[]>(employees);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = filteredEmployees.slice(firstItemIndex, lastItemIndex);
+
+  const employeeToDelete = useRef<Employee | undefined>(undefined);
 
   useEffect(() => {
     if (keyword !== '') {
@@ -42,7 +52,35 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
     } else {
       setFilteredEmployees(employees);
     }
-  }, [keyword]);
+  }, [employees, keyword]);
+
+  const handleRemoveClick = useCallback(
+    (indexRow: string) => (event: unknown) => {
+      const selectedEmployee: Employee | undefined = filteredEmployees.find(
+        (item: Employee) => item.Id === indexRow
+      );
+      if (selectedEmployee) {
+        employeeToDelete.current = selectedEmployee;
+        setPopUpData({
+          status: 'warning',
+          title: 'Remove Employee',
+          body: (
+            <span>
+              Are you sure you want to remove{' '}
+              <b>
+                {selectedEmployee.FirstName} {selectedEmployee.LastName}
+              </b>{' '}
+              from the list of employees?
+            </span>
+          ),
+        });
+      }
+    },
+    [filteredEmployees]
+  );
+
+  const handleClosePopUp = useCallback(() => setPopUpData(undefined), []);
+
   return (
     <React.Fragment>
       <Table striped bordered hover responsive>
@@ -61,12 +99,8 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
           {currentItems.map((employee, index) => (
             <EmployeeTableRow
               employee={employee}
-              handleEdit={(id) => () => {
-                console.log('edit id', id);
-              }}
-              handleRemove={(id) => () => {
-                console.log('delete id', id);
-              }}
+              handleEdit={handleEditEmployee}
+              handleRemove={handleRemoveClick}
             />
           ))}
         </tbody>
@@ -76,6 +110,30 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         setCurrentPage={setCurrentPage}
         items={filteredEmployees}
       />
+      <Modal
+        animation={true}
+        onHide={handleClosePopUp}
+        show={popupData && popupData.status === 'warning'}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{popupData?.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{popupData?.body}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-secondary" onClick={handleClosePopUp}>
+            Cancel
+          </Button>
+          <Button
+            className="light-btn-danger"
+            onClick={() => {
+              handleRemoveEmployee(employeeToDelete.current?.Id ?? '');
+              handleClosePopUp();
+            }}
+          >
+            Remove
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </React.Fragment>
   );
 };

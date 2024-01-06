@@ -21,7 +21,9 @@ model Employee {
   DateOfBirth String
   Phone       String?
   PositionId  String    @db.Uuid
-  Postion     Position  @relation(fields: [PositionId], references: [Id], onDelete: Cascade, onUpdate: NoAction)
+  PictureUrl  String?
+  IsDeleted   Boolean   @default(false)
+  Position     Position  @relation(fields: [PositionId], references: [Id], onDelete: Cascade, onUpdate: NoAction)
   Address     Address[]
 }
 

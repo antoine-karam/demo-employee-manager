@@ -55,19 +55,21 @@ async function main() {
       Email: i.email,
       Gender: i.gender,
       Phone: i.phone,
+      IsDeleted: false,
+      PictureUrl: i.picture.large,
       PositionId: positions[randomInt - 1].Id,
     };
   });
 
   await prisma.employee.createMany({ data: employees });
-  const dbEmployees = await prisma.employee.findMany()
+  const dbEmployees = await prisma.employee.findMany();
   const addresses: Omit<Address, 'Id'>[] = users.map((i, index) => {
     return {
       City: i.location.city,
       Country: i.location.country,
       State: i.location.state,
       Street: i.location.street.name,
-      EmployeeId: dbEmployees[index].Id
+      EmployeeId: dbEmployees[index].Id,
     };
   });
   await prisma.address.createMany({ data: addresses });

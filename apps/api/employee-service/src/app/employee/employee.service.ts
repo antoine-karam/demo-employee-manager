@@ -1,11 +1,19 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../lib/prisma.service';
-import { Employee, Gender } from '../graphql';
+import { Employee, EmployeeInput, Gender } from '../graphql';
+import { generateAddress } from '../../lib/helper';
+import { Employee as DBEmployee, Address as DBAddress } from '@prisma/client';
 
 @Injectable()
 export class EmployeeService {
   private readonly logger = new Logger(EmployeeService.name);
   constructor(private readonly db: PrismaService) {}
+
   async get(): Promise<Employee[]> {
     try {
       const employeesDBO = await this.db.employee.findMany({
@@ -18,15 +26,18 @@ export class EmployeeService {
               Street: true,
             },
           },
-          Postion: {
+          Position: {
             select: {
               Title: true,
             },
           },
         },
+        where: {
+          IsDeleted: false,
+        },
       });
       if (employeesDBO && employeesDBO.length > 0) {
-        const employees: Employee[] = employeesDBO.map((employee, index) => {
+        const employees: Employee[] = employeesDBO.map((employee) => {
           const gender =
             employee.Gender == 'male' ? Gender.Male : Gender.Female;
           return {
@@ -36,10 +47,10 @@ export class EmployeeService {
             Gender: gender,
             Id: employee.Id.toString(),
             LastName: employee.LastName,
-            Position: employee.Postion?.Title ?? 'Default',
+            Position: employee.Position?.Title ?? 'Default',
             Phone: employee.Phone,
-            PrimaryAddress: generateEmployeeAddress(employee.Address),
-            PictureUrl: generateEmployeePictureUrl(index, gender),
+            PrimaryAddress: generateAddress(employee.Address),
+            PictureUrl: employee.PictureUrl,
           };
         });
         return employees;
@@ -49,18 +60,121 @@ export class EmployeeService {
       throw error;
     }
   }
-}
-function generateEmployeeAddress(
-  Address: { City: string; State: string; Country: string; Street: string }[]
-): string {
-  if (Address && Address.length > 0) {
-    const firstAddress = Address[0];
-    return `${firstAddress.Country} ${firstAddress.State} ${firstAddress.City} ${firstAddress.Street}`;
+
+  async delete(id: string): Promise<boolean> {
+    try {
+      const employeeId = parseInt(id, 10);
+      if (isNaN(employeeId)) {
+        throw new BadRequestException('Invalid employee ID');
+      }
+      const result = await this.db.employee.update({
+        data: {
+          IsDeleted: true,
+        },
+        where: {
+          Id: employeeId,
+        },
+      });
+      return result.IsDeleted;
+    } catch (error) {
+      this.logger.error('Error deleting employees from database', error);
+      throw error;
+    }
   }
-  return '';
-}
-function generateEmployeePictureUrl(index: number, gender: Gender): string {
-  return `https://randomuser.me/api/portraits/${
-    gender == Gender.Male ? 'men' : 'women'
-  }/${index}.jpg`;
+
+  async update(employee: EmployeeInput): Promise<Employee> {
+    try {
+      const employeeId = parseInt(employee.Id, 10);
+      const employeeDOB = new Date(employee.DateOfBirth);
+      if (isNaN(employeeId)) {
+        throw new BadRequestException('Invalid employee ID');
+      }
+      const existingEmployee = await this.db.employee.findUnique({
+        include: {
+          Address: true,
+        },
+        where: {
+          Id: employeeId,
+        },
+      });
+      if (!existingEmployee) {
+        throw new NotFoundException(`Employee with ID ${employeeId} not found`);
+      }
+      const updatedAddress = employee.Address
+        ? await this.updateAddress(employee, existingEmployee, employeeId)
+        : undefined;
+
+      let positionId = existingEmployee.PositionId;
+      if (employee.Position) {
+        const { Id: newPositionId } = await this.db.position.findFirst({
+          select: { Id: true },
+          where: { Title: employee.Position },
+        });
+        positionId = newPositionId;
+      }
+      const result = await this.db.employee.update({
+        data: {
+          Address: {
+            update: {
+              where: {
+                Id: updatedAddress.Id,
+              },
+              data: updatedAddress,
+            },
+          },
+          PositionId: positionId,
+          DateOfBirth: `${employeeDOB.getFullYear()}-${employeeDOB.getMonth()}-${employeeDOB.getDate()}`,
+          Email: employee.Email,
+          FirstName: employee.FirstName,
+          Gender: employee.Gender == Gender.Male ? 'male' : 'female',
+          LastName: employee.LastName,
+          Phone: employee.Phone,
+          PictureUrl: employee.PictureUrl,
+        },
+        where: { Id: employeeId },
+      });
+      const gender = result.Gender == 'male' ? Gender.Male : Gender.Female;
+      return {
+        DateOfBirth: new Date(result.DateOfBirth),
+        Email: result.Email,
+        FirstName: result.FirstName,
+        Gender: gender,
+        Id: result.Id.toString(),
+        LastName: result.LastName,
+        Position: employee.Position ?? 'Default',
+        Phone: result.Phone,
+        PrimaryAddress: generateAddress([employee.Address]),
+        PictureUrl: result.PictureUrl,
+      };
+    } catch (error) {
+      this.logger.error('Error updating employee in database', error);
+      throw error;
+    }
+  }
+
+  private async updateAddress(
+    employee: EmployeeInput,
+    existingEmployee: {
+      Address: DBAddress[];
+    } & DBEmployee,
+    employeeId: number
+  ) {
+    const addressUpdate = {
+      City: employee.Address.City,
+      Country: employee.Address.Country,
+      State: employee.Address.State,
+      Street: employee.Address.Street,
+      Id: undefined,
+    };
+    if (existingEmployee.Address && existingEmployee.Address.length > 0) {
+      addressUpdate.Id = existingEmployee.Address[0].Id;
+    } else {
+      const { Id: addressId } = await this.db.address.create({
+        data: { ...addressUpdate, EmployeeId: employeeId },
+        select: { Id: true },
+      });
+      addressUpdate.Id = addressId;
+    }
+    return addressUpdate;
+  }
 }

@@ -1,24 +1,47 @@
 scalar Date
 
-enum Gender{
-    Male
-    Female
-} 
-
+enum Gender {
+  Male
+  Female
+}
 
 type Employee {
-    Id: String!
-    Position: String!
-    Gender: Gender!
-    FirstName: String!
-    LastName: String!
-    Email: String!
-    PictureUrl: String
-    DateOfBirth: Date!
-    Phone: String
-    PrimaryAddress: String
+  Id: String!
+  Position: String!
+  Gender: Gender!
+  FirstName: String!
+  LastName: String!
+  Email: String!
+  PictureUrl: String
+  DateOfBirth: Date!
+  Phone: String!
+  PrimaryAddress: String!
+}
+
+input EmployeeInput {
+  Id: String!
+  Position: String!
+  Gender: Gender!
+  FirstName: String!
+  LastName: String!
+  Email: String!
+  PictureUrl: String
+  DateOfBirth: Date!
+  Phone: String!
+  Address: AddressInput!
+}
+input AddressInput {
+  City: String!
+  State: String!
+  Country: String!
+  Street: String!
 }
 
 type Query {
   employees: [Employee]
+}
+
+type Mutation {
+  removeEmployee(id: String!): Boolean!
+  updateEmployee(employee: EmployeeInput!): Employee!
 }
