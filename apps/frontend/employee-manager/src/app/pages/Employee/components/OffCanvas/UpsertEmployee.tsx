@@ -1,9 +1,6 @@
-import React, { useCallback,  useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
-import {
-  AlertNotification,
-  Employee,
-} from '../../../../helper/types';
+import { AlertNotification, Employee } from '../../../../helper/types';
 
 import Alert from '../../../../components/Alert/Alert';
 
@@ -12,7 +9,7 @@ import ActionButton from '../../../../components/ActionButton/ActionButton';
 import GeneralInfo, { Ref as generalInfoRef } from './Tabs/GeneralInfo';
 import { scrollToTop } from '../../../../helper/general';
 import { useMutation } from '@apollo/client';
-import { UPDATE_EMPLOYEE } from '../../graphql/mutations';
+import { ADD_EMPLOYEE, UPDATE_EMPLOYEE } from '../../graphql/mutations';
 
 const UpsertEmployee: React.FC<{
   employee: Employee | undefined;
@@ -24,8 +21,11 @@ const UpsertEmployee: React.FC<{
   const [updateEmployee] = useMutation<boolean>(UPDATE_EMPLOYEE, {
     refetchQueries: ['GetEmployees'],
   });
+  const [addEmployee] = useMutation<boolean>(ADD_EMPLOYEE, {
+    refetchQueries: ['GetEmployees'],
+  });
+
   const generalInfoRef = useRef<generalInfoRef>(null);
-  //   const permissionsRef = useRef<permissionTref>(null);
   const [alert, setAlert] = useState<AlertNotification | null>(null);
   const handleSave = useCallback(async () => {
     let isContinue = true;
@@ -64,26 +64,22 @@ const UpsertEmployee: React.FC<{
         DateOfBirth: refs['dob'].current.value,
         Phone: refs['phone'].current.value,
         Address: {
-          City: 'Baabda',
-          State: 'Hadat',
-          Country: 'Lebanon',
-          Street: 'Khreibe',
+          City: refs['city'].current.value,
+          State: refs['state'].current.value,
+          Country: refs['country'].current.value,
+          Street: refs['street'].current.value,
         },
       };
       if (body.Id) {
         updateEmployee({ variables: { employee: body } });
       } else {
-        setAlert({
-          status: 'danger',
-          body: 'Please select a valid employee to delete',
-          title: 'Invalid Employee Id',
-        });
+        addEmployee({ variables: { employee: body } });
       }
       handleCloseOffCanvas();
     } catch (error) {
       setAlert({
         status: 'danger',
-        body: 'An error occured while saving employee',
+        body: 'An error occurred while saving employee',
         title: 'Error While saving',
       });
     }

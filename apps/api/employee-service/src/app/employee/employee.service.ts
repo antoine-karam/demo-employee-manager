@@ -118,7 +118,56 @@ export class EmployeeService {
       throw error;
     }
   }
-
+  async add(employee: EmployeeInput): Promise<Employee> {
+    try {
+      const employeeDOB = new Date(employee.DateOfBirth);
+      const { Id: newPositionId } = await this.db.position.findFirst({
+        select: { Id: true },
+        where: { Title: employee.Position },
+      });
+      const positionId = newPositionId;
+      const result = await this.db.employee.create({
+        data: {
+          Address: {
+            create: {
+              Street: employee.Address.Street,
+              City: employee.Address.City,
+              Country: employee.Address.Country,
+              State: employee.Address.State,
+            },
+          },
+          PositionId: positionId,
+          DateOfBirth: `${employeeDOB.getFullYear()}-${employeeDOB.getMonth()}-${employeeDOB.getDate()}`,
+          Email: employee.Email,
+          FirstName: employee.FirstName,
+          Gender: employee.Gender == Gender.Male ? 'male' : 'female',
+          LastName: employee.LastName,
+          Phone: employee.Phone,
+          PictureUrl: employee.PictureUrl,
+        },
+        include: {
+          Address: true,
+          Position: true,
+        },
+      });
+      const gender = result.Gender == 'male' ? Gender.Male : Gender.Female;
+      return {
+        DateOfBirth: new Date(result.DateOfBirth),
+        Email: result.Email,
+        FirstName: result.FirstName,
+        Gender: gender,
+        Id: result.Id.toString(),
+        LastName: result.LastName,
+        Position: result.Position?.Title ?? 'Default',
+        Phone: result.Phone,
+        PrimaryAddress: generateAddress(result.Address),
+        PictureUrl: result.PictureUrl,
+      };
+    } catch (error) {
+      this.logger.error('Error adding employee in database', error);
+      throw error;
+    }
+  }
   async update(employee: EmployeeInput): Promise<Employee> {
     try {
       const employeeId = parseInt(employee.Id, 10);

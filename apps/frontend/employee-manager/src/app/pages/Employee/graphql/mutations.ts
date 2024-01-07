@@ -22,3 +22,20 @@ export const UPDATE_EMPLOYEE = gql`
     }
   }
 `;
+
+export const ADD_EMPLOYEE = gql`
+  mutation addEmployee($employee: EmployeeInput!) {
+    addEmployee(employee: $employee) {
+      Id
+      FirstName
+      LastName
+      Position
+      Gender
+      Email
+      PictureUrl
+      DateOfBirth
+      Phone
+      PrimaryAddress
+    }
+  }
+`;

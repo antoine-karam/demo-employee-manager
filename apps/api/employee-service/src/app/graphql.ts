@@ -14,7 +14,7 @@ export enum Gender {
 }
 
 export class EmployeeInput {
-    Id: string;
+    Id?: Nullable<string>;
     Position: string;
     Gender: Gender;
     FirstName: string;
@@ -69,6 +69,8 @@ export abstract class IMutation {
     abstract removeEmployee(id: string): boolean | Promise<boolean>;
 
     abstract updateEmployee(employee: EmployeeInput): Employee | Promise<Employee>;
+
+    abstract addEmployee(employee: EmployeeInput): Employee | Promise<Employee>;
 }
 
 type Nullable<T> = T | null;

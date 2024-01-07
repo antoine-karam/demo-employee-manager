@@ -27,7 +27,7 @@ type Address{
   Street: String!
 }
 input EmployeeInput {
-  Id: String!
+  Id: String
   Position: String!
   Gender: Gender!
   FirstName: String!
@@ -54,4 +54,5 @@ type Query {
 type Mutation {
   removeEmployee(id: String!): Boolean!
   updateEmployee(employee: EmployeeInput!): Employee!
+  addEmployee(employee: EmployeeInput!): Employee!
 }

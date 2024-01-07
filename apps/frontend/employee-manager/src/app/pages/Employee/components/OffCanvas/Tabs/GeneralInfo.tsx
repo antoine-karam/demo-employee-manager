@@ -18,17 +18,16 @@ import Select, {
   Ref as SelectRef,
 } from '../../../../../components/Select/Select';
 
+import { countryOptions } from '../../../dropDownData';
 import { scrollToTop } from '../../../../../helper/general';
 import { GET_EMPLOYEE_ADDRESS } from '../../../graphql/queries';
 import LoaderScreen from '../../../../../components/Loader/LoaderScreen';
 import Input, { Ref as InputRef } from '../../../../../components/Input/Input';
 
-
 import classes from './GeneralInfo.module.less';
 import { useQuery } from '@apollo/client';
 type Component = {
   employee?: Employee;
-  employeeAddress?: EmployeeAddress;
   positions: {
     Title: string;
   }[];
@@ -41,7 +40,7 @@ export type Ref = {
 };
 
 const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
-  { employee, positions, employeeAddress },
+  { employee, positions },
   ref
 ) => {
   const { data, loading } = useQuery<{
@@ -57,6 +56,9 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
   const genderRef = useRef<SelectRef>(null);
   const positionRef = useRef<SelectRef>(null);
   const countryRef = useRef<SelectRef>(null);
+  const cityRef = useRef<InputRef>(null);
+  const streetRef = useRef<InputRef>(null);
+  const stateRef = useRef<InputRef>(null);
 
   const refs: MapRefs = {
     firstName: firstNameRef,
@@ -67,6 +69,9 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
     position: positionRef,
     phone: phoneRef,
     country: countryRef,
+    city: cityRef,
+    street: streetRef,
+    state: stateRef,
   };
 
   const formIsValid = useRef<FormValid>({
@@ -88,6 +93,21 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
     dob: {
       isValidated: false,
       requiredFeedback: "Date Of Birth can't be empty",
+      feedback: '',
+    },
+    city: {
+      isValidated: false,
+      requiredFeedback: "City can't be empty",
+      feedback: '',
+    },
+    street: {
+      isValidated: false,
+      requiredFeedback: "Street can't be empty",
+      feedback: '',
+    },
+    state: {
+      isValidated: false,
+      requiredFeedback: "State can't be empty",
       feedback: '',
     },
   });
@@ -137,6 +157,27 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
         }
         formIsValid.current.dob.isValidated = true;
         return '';
+      case 'state':
+        if (trimmedValue === '') {
+          formIsValid.current.state.isValidated = false;
+          return formIsValid.current.state.requiredFeedback;
+        }
+        formIsValid.current.state.isValidated = true;
+        return '';
+      case 'street':
+        if (trimmedValue === '') {
+          formIsValid.current.street.isValidated = false;
+          return formIsValid.current.street.requiredFeedback;
+        }
+        formIsValid.current.street.isValidated = true;
+        return '';
+      case 'city':
+        if (trimmedValue === '') {
+          formIsValid.current.city.isValidated = false;
+          return formIsValid.current.city.requiredFeedback;
+        }
+        formIsValid.current.city.isValidated = true;
+        return '';
       default:
         if (formIsValid.current[id]) formIsValid.current[id].isValidated = true;
         return '';
@@ -162,6 +203,7 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
   }));
 
   if (loading) return <LoaderScreen text="Loading" />;
+  const employeeAddress = data?.address;
   return (
     <div className={classes.infoContainer}>
       <Container>
@@ -255,13 +297,44 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
         <Row>
           <Col md={6}>
             <Select
+              required
               id="country"
               label="Country"
               ref={countryRef}
-              value={data?.address?.Country}
-              options={positions.map((i) => {
-                return { label: i.Title, value: i.Title };
-              })}
+              value={employeeAddress?.Country}
+              options={countryOptions}
+            />
+          </Col>
+          <Col md={6}>
+            <Input
+              required
+              id="state"
+              ref={stateRef}
+              label="State"
+              onHandleChange={handleChange}
+              value={employeeAddress?.State}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <Input
+              required
+              id="city"
+              ref={cityRef}
+              label="City"
+              onHandleChange={handleChange}
+              value={employeeAddress?.City}
+            />
+          </Col>
+          <Col md={6}>
+            <Input
+              required
+              id="street"
+              ref={streetRef}
+              label="Street"
+              onHandleChange={handleChange}
+              value={employeeAddress?.Street}
             />
           </Col>
         </Row>

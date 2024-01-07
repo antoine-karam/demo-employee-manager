@@ -48,12 +48,15 @@ const Input: ForwardRefRenderFunction<Ref, InputType> = (
   },
   ref
 ) => {
+  const [isTouched, setIsTouched] = useState(false);
   const [inputValue, setInputValue] = useState<string>(value || '');
   const [inputFeedBack, setInputFeedBack] = useState<string>(feedback || '');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const debouncedValue = useDebounce(inputValue, 300);
-
+  const handleBlur = () => {
+    setIsTouched(true);
+  };
   useEffect(() => {
     if (onHandleChange) {
       const validationMsg = onHandleChange(id, debouncedValue);
@@ -96,7 +99,8 @@ const Input: ForwardRefRenderFunction<Ref, InputType> = (
             required={required}
             type={type ?? 'text'}
             onChange={(e) => setInputValue(e.target.value)}
-            isInvalid={inputFeedBack !== ''}
+            isInvalid={isTouched && inputFeedBack !== ''}
+            onBlur={handleBlur}
             {...(type === 'number' ? { min: min, max: max } : {})}
             disabled={disabled}
             className={
@@ -104,9 +108,11 @@ const Input: ForwardRefRenderFunction<Ref, InputType> = (
             }
             {...rest}
           />
-          <Form.Control.Feedback type="invalid">
-            {inputFeedBack}
-          </Form.Control.Feedback>
+          {isTouched && inputFeedBack && (
+            <Form.Control.Feedback type="invalid">
+              {inputFeedBack}
+            </Form.Control.Feedback>
+          )}
           <div className={classes.actionContainer}>
             {!!inputValue && !disabled && (
               <IconButton

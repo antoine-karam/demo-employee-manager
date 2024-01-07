@@ -43,6 +43,27 @@
     height: 90%;
   }
 }
+.toolBar {
+  display: flex;
+  margin-bottom: 1.5rem;
+  justify-content: flex-end;
+}
+
+.toolBar button:hover {
+  border: 0.063rem solid #3c5482;
+  background-color: #3c5482;
+}
+.toolBar button {
+  width: 9rem;
+  border: 0.063rem solid @color-active-page-link-bg;
+  background-color: @color-active-page-link-bg;
+}
+.addUser {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 1900px) {
   .offCanvas {
     width: 60% !important;

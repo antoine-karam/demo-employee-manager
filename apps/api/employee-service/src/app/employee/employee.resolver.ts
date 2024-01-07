@@ -26,4 +26,8 @@ export class EmployeeResolver {
   async updateEmployee(@Args('employee')employee: EmployeeInput):  Promise<Employee>{
     return await this.employeeService.update(employee);
   }
+  @Mutation()
+  async addEmployee(@Args('employee')employee: EmployeeInput):  Promise<Employee>{
+    return await this.employeeService.add(employee);
+  }
 }

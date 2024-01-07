@@ -15,6 +15,8 @@ import { AlertNotification, Employee } from '../../helper/types';
 import noProfile from '../../../assets/no-profile-picture.png';
 import classes from './Employee.module.less';
 import UpsertEmployee from './components/OffCanvas/UpsertEmployee';
+import IconButton from '../../components/IconButton/IconButton';
+import { RiUserAddLine } from 'react-icons/ri';
 
 const EmployeePage: React.FC<{ title: string; description: string }> = ({
   title,
@@ -31,6 +33,8 @@ const EmployeePage: React.FC<{ title: string; description: string }> = ({
   });
 
   const [alert, setAlert] = useState<AlertNotification | null>(null);
+
+  const [isAddEmployee, setIsAddEmployee] = useState<boolean>(false);
   const [isEditEmployee, setIsEditEmployee] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<
     Employee | undefined
@@ -55,6 +59,13 @@ const EmployeePage: React.FC<{ title: string; description: string }> = ({
       ? setSelectedEmployee(selectedEmployees[0])
       : setIsEditEmployee(false);
   };
+
+  const handleAddEmployee = () => {
+    setIsAddEmployee(true);
+    setSelectedEmployee(undefined);
+    setIsEditEmployee(false);
+  };
+
   const handleRemoveEmployee = (id: string) => {
     if (id) {
       deleteEmployee({ variables: { Id: id } });
@@ -83,6 +94,15 @@ const EmployeePage: React.FC<{ title: string; description: string }> = ({
           }}
         />
       )}
+      <div className={classes.toolBar}>
+        <IconButton
+          disabledFocusOnTab
+          className={classes.addUser}
+          onClick={handleAddEmployee}
+        >
+          <RiUserAddLine size="1.3rem" />
+        </IconButton>
+      </div>
       {data && data.employees && (
         <EmployeeTable
           employees={data.employees}
@@ -97,7 +117,7 @@ const EmployeePage: React.FC<{ title: string; description: string }> = ({
           setSelectedEmployee(undefined);
         }}
         className={classes.offCanvas}
-        show={isEditEmployee}
+        show={isEditEmployee || isAddEmployee}
       >
         <Offcanvas.Header closeButton className={classes.offCanvasHeader}>
           <Offcanvas.Title>
@@ -111,6 +131,7 @@ const EmployeePage: React.FC<{ title: string; description: string }> = ({
               <div className={classes.offCanvasTitle}>
                 {isEditEmployee &&
                   `Edit Employee - ${selectedEmployee?.FirstName} ${selectedEmployee?.LastName}`}
+                {isAddEmployee && 'Add Employee'}
               </div>
             </div>
           </Offcanvas.Title>
@@ -122,6 +143,7 @@ const EmployeePage: React.FC<{ title: string; description: string }> = ({
           <UpsertEmployee
             employee={selectedEmployee}
             handleCloseOffCanvas={() => {
+              setIsAddEmployee(false);
               setIsEditEmployee(false);
               setSelectedEmployee(undefined);
             }}
