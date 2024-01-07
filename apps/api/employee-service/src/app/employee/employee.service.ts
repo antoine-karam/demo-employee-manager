@@ -35,6 +35,9 @@ export class EmployeeService {
         where: {
           IsDeleted: false,
         },
+        orderBy: {
+          Id: 'asc',
+        },
       });
       if (employeesDBO && employeesDBO.length > 0) {
         const employees: Employee[] = employeesDBO.map((employee) => {

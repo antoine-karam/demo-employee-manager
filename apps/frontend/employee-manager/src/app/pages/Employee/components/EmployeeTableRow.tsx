@@ -5,6 +5,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { MdExpandLess, MdExpandMore } from 'react-icons/md';
 
 import { Employee } from '../../../helper/types';
+import noProfile from '../../../../assets/no-profile-picture.png';
 import IconButton from '../../../components/IconButton/IconButton';
 
 import classes from './EmployeeTableRow.module.less';
@@ -38,7 +39,7 @@ const EmployeeTableRow: React.FC<{
         <td>
           <Image
             alt="profile"
-            src={employee.PictureUrl}
+            src={employee.PictureUrl ?? noProfile}
             className={classes.img}
           />
         </td>
@@ -58,7 +59,7 @@ const EmployeeTableRow: React.FC<{
           </IconButton>
         </td>
       </tr>
-      
+
       <tr className={classes.hiddenTr}></tr>
       <tr className={!open ? classes.collapsibleRow : undefined}>
         <td

@@ -5,6 +5,7 @@ import React, {
   useRef,
   useCallback,
   useImperativeHandle,
+  useEffect,
 } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
@@ -25,7 +26,8 @@ import LoaderScreen from '../../../../../components/Loader/LoaderScreen';
 import Input, { Ref as InputRef } from '../../../../../components/Input/Input';
 
 import classes from './GeneralInfo.module.less';
-import { useQuery } from '@apollo/client';
+
+import { useLazyQuery } from '@apollo/client';
 type Component = {
   employee?: Employee;
   positions: {
@@ -43,11 +45,9 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
   { employee, positions },
   ref
 ) => {
-  const { data, loading } = useQuery<{
+  const [getEmployeeAddress, { data, loading }] = useLazyQuery<{
     address: EmployeeAddress;
-  }>(GET_EMPLOYEE_ADDRESS, {
-    variables: { id: employee?.Id ?? '' },
-  });
+  }>(GET_EMPLOYEE_ADDRESS, { variables: { id: employee?.Id ?? '' } });
   const firstNameRef = useRef<InputRef>(null);
   const lastNameRef = useRef<InputRef>(null);
   const emailRef = useRef<InputRef>(null);
@@ -194,6 +194,13 @@ const GeneralInfo: ForwardRefRenderFunction<Ref, Component> = (
     updateInputStatus(false);
     scrollToTop('grid-off-canvas-body')();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (employee?.Id) {
+      getEmployeeAddress();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useImperativeHandle(ref, () => ({
