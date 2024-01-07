@@ -12,6 +12,7 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 import RootLayout from './pages/RootLayout/RootLayout';
 
 import classes from './app.module.less';
+import Home from './pages/Home/Home';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <BlankPage title="Welcome, Admin" description="" />,
+        element: <Home title="Welcome, Admin" description="This page is just dummy data please proceed to /Employee" />,
       },
       {
         path: '/blank',

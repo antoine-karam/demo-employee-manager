@@ -21,14 +21,14 @@ const BlankPage: React.FC<{ title: string; description: string }> = ({
     if (!initialized.current) {
       initialized.current = true;
       const populate = async () => {
-        await delay(2000);
+        await delay(500);
         return [];
       };
       populate()
         .then(() => {
           setIsLoading(false);
         })
-        .catch((error: any) => {
+        .catch((error: unknown) => {
           setIsLoading(false);
           setIsError('loading');
         });

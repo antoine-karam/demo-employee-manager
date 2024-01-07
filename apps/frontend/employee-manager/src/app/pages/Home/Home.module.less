@@ -1,0 +1,95 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+// Variables
+@primary-color: #007bff; // Example primary color, adjust as needed
+@secondary-color: #6c757d; // Example secondary color
+@text-color: #333;
+@font-family: 'Arial', sans-serif;
+
+// Global Styles
+body {
+  font-family: @font-family;
+  color: @text-color;
+}
+
+// Hero Section
+.heroSection {
+  background-color: @primary-color;
+  color: #fff;
+  text-align: center;
+  padding: 50px 0;
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+// Features Section
+.featuresSection {
+  padding: 50px 0;
+  text-align: center;
+
+  h2 {
+    color: @primary-color;
+    margin-bottom: 15px;
+  }
+
+  p {
+    color: @secondary-color;
+  }
+}
+
+// Demo Section
+.demoSection {
+  background-color: #f8f9fa;
+  padding: 50px 0;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  button {
+    background-color: @secondary-color;
+    color: #fff;
+    &:hover {
+      background-color: darken(@secondary-color, 10%);
+    }
+  }
+}
+
+// Testimonials Section
+.testimonialsSection {
+  padding: 50px 0;
+  text-align: center;
+
+  blockquote {
+    font-style: italic;
+    color: @secondary-color;
+  }
+}
+
+// CTA Section
+.ctaSection {
+  padding: 50px 0;
+  text-align: center;
+
+  button {
+    background-color: #28a745;
+    color: #fff;
+    &:hover {
+      background-color: darken(#28a745, 10%);
+    }
+  }
+}
