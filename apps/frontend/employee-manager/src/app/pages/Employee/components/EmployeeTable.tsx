@@ -98,6 +98,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         <tbody>
           {currentItems.map((employee, index) => (
             <EmployeeTableRow
+              key={index}
               employee={employee}
               handleEdit={handleEditEmployee}
               handleRemove={handleRemoveClick}

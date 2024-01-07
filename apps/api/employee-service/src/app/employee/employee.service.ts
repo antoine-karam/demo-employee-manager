@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../lib/prisma.service';
-import { Employee, EmployeeInput, Gender } from '../graphql';
+import { Address, Employee, EmployeeInput, Gender, Position } from '../graphql';
 import { generateAddress } from '../../lib/helper';
 import { Employee as DBEmployee, Address as DBAddress } from '@prisma/client';
 
@@ -60,7 +60,44 @@ export class EmployeeService {
       throw error;
     }
   }
+  async getPositions(): Promise<Position[]> {
+    try {
+      const positionsDBO = await this.db.position.findMany();
+      if (positionsDBO && positionsDBO.length > 0) {
+        return positionsDBO.map((i) => {
+          return { Title: i.Title };
+        });
+      }
+    } catch (error) {
+      this.logger.error('Error retrieving employees from database', error);
+      throw error;
+    }
+  }
 
+  async getAddress(id: string): Promise<Address> {
+    try {
+      const employeeId = parseInt(id, 10);
+      if (isNaN(employeeId)) {
+        throw new BadRequestException('Invalid employee ID');
+      }
+      const addressDBO = await this.db.address.findFirst({
+        where: {
+          EmployeeId: employeeId,
+        },
+      });
+      if (addressDBO) {
+        return {
+          City: addressDBO.City,
+          Country: addressDBO.Country,
+          State: addressDBO.State,
+          Street: addressDBO.Street,
+        };
+      }
+    } catch (error) {
+      this.logger.error('Error retrieving employees from database', error);
+      throw error;
+    }
+  }
   async delete(id: string): Promise<boolean> {
     try {
       const employeeId = parseInt(id, 10);

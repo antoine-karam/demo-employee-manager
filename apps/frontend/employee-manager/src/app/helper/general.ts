@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+
+/* eslint-disable */
 export const scrollToTop = (id?: string) => () => {
   const doc = document.getElementById(id || 'my-outlet');
   if (doc) {
@@ -15,6 +18,21 @@ export const currentLocation = (path: string, defaultLocation: string) => {
   } else {
     return '';
   }
+};
+export const useDebounce = (value: any, delay: number): any => {
+  const [debouncedValue, setDebouncedValue] = useState<any>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [delay, value]);
+
+  return debouncedValue;
 };
 
 export const generateTheme = (): CSSStyleDeclaration => {

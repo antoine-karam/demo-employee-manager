@@ -46,8 +46,23 @@ export class Employee {
     PrimaryAddress: string;
 }
 
+export class Position {
+    Title: string;
+}
+
+export class Address {
+    City: string;
+    State: string;
+    Country: string;
+    Street: string;
+}
+
 export abstract class IQuery {
     abstract employees(): Nullable<Nullable<Employee>[]> | Promise<Nullable<Nullable<Employee>[]>>;
+
+    abstract positions(): Nullable<Nullable<Position>[]> | Promise<Nullable<Nullable<Position>[]>>;
+
+    abstract address(id: string): Nullable<Address> | Promise<Nullable<Address>>;
 }
 
 export abstract class IMutation {

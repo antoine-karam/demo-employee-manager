@@ -17,3 +17,22 @@ export type Employee = {
   Phone?: string;
   PrimaryAddress?: string;
 };
+
+export type EmployeeAddress = {
+  City: string;
+  State: string;
+  Country: string;
+  Street: string;
+};
+
+type Formkey = {
+  isValidated: boolean;
+  requiredFeedback: string;
+  feedback: string;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MapRefs = { [key: string]: any };
+export type FormValid = {
+  [key: string]: Formkey;
+};

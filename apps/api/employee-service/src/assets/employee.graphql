@@ -17,7 +17,15 @@ type Employee {
   Phone: String!
   PrimaryAddress: String!
 }
-
+type Position {
+  Title: String!
+}
+type Address{
+  City: String!
+  State: String!
+  Country: String!
+  Street: String!
+}
 input EmployeeInput {
   Id: String!
   Position: String!
@@ -39,6 +47,8 @@ input AddressInput {
 
 type Query {
   employees: [Employee]
+  positions: [Position]
+  address(id: String!): Address
 }
 
 type Mutation {

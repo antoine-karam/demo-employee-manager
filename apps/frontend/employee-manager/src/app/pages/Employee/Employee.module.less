@@ -1,0 +1,77 @@
+@import '../../../variables.less';
+.offCanvas {
+  width: 50% !important;
+
+  .offCanvasHeader {
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
+    height: 12rem;
+    background-image: url('../../../assets/profile-cover.jpg');
+
+    button {
+      position: relative;
+      top: -3.5rem;
+      right: 1rem;
+    }
+
+    .offCanvasTitleContainer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      .img {
+        border: 0.125rem solid @color-card-bg;
+        height: 10rem;
+        width: 10rem;
+
+        position: relative;
+        top: 0.5rem;
+        left: 1rem;
+      }
+      .offCanvasTitle {
+        top: -3rem;
+        left: 4rem;
+        font-size: 2rem;
+        position: relative;
+        color: @color-active-page-link-color;
+      }
+    }
+  }
+
+  .offCanvasBody {
+    padding-bottom: 0.7rem;
+    height: 90%;
+  }
+}
+@media (max-width: 1900px) {
+  .offCanvas {
+    width: 60% !important;
+  }
+}
+
+@media (max-width: 1337px) {
+  .offCanvas {
+    width: 70% !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .offCanvas {
+    width: 80% !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .offCanvas {
+    width: 100% !important;
+    .offCanvasTitle {
+      top: auto;
+      left: 1.5rem;
+      font-size: 1.3rem;
+      padding-left: 0.2rem;
+      padding-right: 0.2rem;
+      background-color: whitesmoke;
+      color: var(--color-active-page-link-color);
+    }
+  }
+}

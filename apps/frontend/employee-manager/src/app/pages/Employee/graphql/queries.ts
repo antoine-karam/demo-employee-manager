@@ -14,5 +14,19 @@ export const GET_EMPLOYEES = gql`
       Phone
       PrimaryAddress
     }
+    positions {
+      Title
+    }
+  }
+`;
+
+export const GET_EMPLOYEE_ADDRESS = gql`
+  query GetEmployeeAddress($id: String!) {
+    address(id: $id) {
+      City
+      State
+      Country
+      Street
+    }
   }
 `;

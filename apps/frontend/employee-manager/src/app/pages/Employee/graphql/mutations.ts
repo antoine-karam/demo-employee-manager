@@ -5,3 +5,20 @@ export const DELETE_EMPLOYEE = gql`
     removeEmployee(id: $Id)
   }
 `;
+
+export const UPDATE_EMPLOYEE = gql`
+  mutation updatedEmployee($employee: EmployeeInput!) {
+    updateEmployee(employee: $employee) {
+      Id
+      FirstName
+      LastName
+      Position
+      Gender
+      Email
+      PictureUrl
+      DateOfBirth
+      Phone
+      PrimaryAddress
+    }
+  }
+`;

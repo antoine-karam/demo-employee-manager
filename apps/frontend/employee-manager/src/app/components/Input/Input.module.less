@@ -1,0 +1,26 @@
+.label {
+  font-size: 0.875rem;
+}
+.inputContainer {
+  position: relative;
+  .formControl {
+    padding-right: 2.5rem !important;
+  }
+
+  .formControl:global(.is-invalid) {
+    padding-right: 3.7rem !important;
+  }
+  .actionContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    .btnClose {
+      position: absolute;
+      right: 0.5rem;
+      top: 0.25rem;
+    }
+    .btnInvalid {
+      right: 1.8rem;
+    }
+  }
+}
